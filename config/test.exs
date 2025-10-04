@@ -5,9 +5,13 @@ import Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
+if System.get_env("DB_USER") do
+  config :alea, Alea.Repo,
+    username: System.get_env("DB_USER"),
+    password: System.get_env("DB_PASSWORD")
+end
+
 config :alea, Alea.Repo,
-  # username: "postgres",
-  # password: "postgres",
   hostname: "localhost",
   database: "alea_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
