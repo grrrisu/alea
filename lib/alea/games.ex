@@ -7,8 +7,11 @@ defmodule Alea.Games do
   @doc """
   Fetches games from BoardGameGeek
   """
+
+  alias Alea.Game
+
   def fetch_bgg_games do
-    bgg_client().fetch_games()
+    bgg_client().fetch_games() |> Game.parse()
   end
 
   defp bgg_client do
