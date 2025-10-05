@@ -35,3 +35,6 @@ alea-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# local env files
+*.env
+

@@ -67,6 +67,7 @@ defmodule Alea.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:mox, "~> 1.1", only: :test},
       {:monsum, github: "grrrisu/monsum", app: false}
     ]
   end
