@@ -1,4 +1,8 @@
 defmodule Alea.Game do
+  @moduledoc """
+  Represents a board game from BoardGameGeek.
+  """
+
   import SweetXml
 
   alias Alea.{Game, Status}
@@ -21,7 +25,7 @@ defmodule Alea.Game do
     xml
     |> parse_xml()
     |> Enum.map(fn game ->
-      status = struct(Status, game.status)
+      status = struct(Status, convert_status(game.status))
       struct(Game, %{game | status: status})
     end)
   end
@@ -53,4 +57,23 @@ defmodule Alea.Game do
       ]
     )
   end
+
+  # Convert "0"/"1" strings to booleans
+  defp convert_status(status) do
+    %{
+      own: to_boolean(status.own),
+      prevowned: to_boolean(status.prevowned),
+      fortrade: to_boolean(status.fortrade),
+      want: to_boolean(status.want),
+      wanttoplay: to_boolean(status.wanttoplay),
+      wanttobuy: to_boolean(status.wanttobuy),
+      wishlist: to_boolean(status.wishlist),
+      preordered: to_boolean(status.preordered),
+      lastmodified: status.lastmodified
+    }
+  end
+
+  defp to_boolean("1"), do: true
+  defp to_boolean("0"), do: false
+  defp to_boolean(_), do: false
 end
