@@ -26,22 +26,36 @@ defmodule Alea.GameTest do
   """
 
   test "parses XML and returns list of Game structs" do
-    games = Game.parse(@xml)
+    [game | _] = Game.parse(@xml)
 
-    assert length(games) == 2
-    [game1, _game2] = games
+    assert game.objectid == "173346"
+    assert game.name == "7 Wonders Duel"
+    assert game.sortindex == 1
+    assert game.yearpublished == 2015
+    assert game.numplays == 8
 
-    assert game1.objectid == "173346"
-    assert game1.name == "7 Wonders Duel"
-    assert game1.yearpublished == 2015
-
-    assert game1.image ==
+    assert game.image ==
              "https://cf.geekdo-images.com/zdagMskTF7wJBPjX74XsRw__original/img/Ju836WNSaW7Mab9Vjq2TJ_FqhWQ=/0x0/filters:format(jpeg)/pic2576399.jpg"
 
-    assert game1.thumbnail ==
+    assert game.thumbnail ==
              "https://cf.geekdo-images.com/zdagMskTF7wJBPjX74XsRw__small/img/gV1-ckZSIC-dCxxpq1Y7GmPITzQ=/fit-in/200x150/filters:strip_icc()/pic2576399.jpg"
+  end
 
-    assert game1.status.own == "1"
-    assert game1.status.wishlist == "0"
+  test "converts status strings to booleans" do
+    [game | _] = Game.parse(@xml)
+
+    assert game.status.own == true
+    assert game.status.prevowned == false
+    assert game.status.wishlist == false
+    assert game.status.lastmodified == "2023-02-17 13:25:03"
+  end
+
+  test "returns empty list for XML with no games" do
+    xml = """
+    <?xml version="1.0" encoding="utf-8"?>
+    <items totalitems="0"></items>
+    """
+
+    assert Game.parse(xml) == []
   end
 end
