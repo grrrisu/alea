@@ -18,6 +18,7 @@ defmodule AleaWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/games", GamesLive
   end
 
   # Other scopes may use custom stacks.
