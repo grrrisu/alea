@@ -85,6 +85,7 @@ defmodule AleaWeb do
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components
+      import Monsum.MainComponents
       import AleaWeb.CoreComponents
 
       # Common modules used in templates
