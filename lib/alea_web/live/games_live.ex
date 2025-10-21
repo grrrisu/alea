@@ -16,18 +16,18 @@ defmodule AleaWeb.GamesLive do
         <legend class="fieldset-legend">Filter options</legend>
         <label class="label">
           <input type="checkbox" checked="checked" class="toggle" name="extensions" /> Extensions
-          <.icon name="la-puzzle-piece" />
+          <.icon name="la-puzzle-piece" class="la-2x" />
         </label>
         <label class="label">
           <input type="checkbox" checked="checked" class="toggle" name="owned" /> Owned
-          <.icon name="la-home" />
+          <.icon name="hero-building-library" />
         </label>
       </fieldset>
 
-      <.box_grid cols="4">
+      <.box_grid cols="4" class="gap-4">
         <:box :for={game <- @games}>
           <div
-            class="border border-info rounded flex flex-col bg-linear-to-br from-base-300 to-base-300/50"
+            class="border rounded-lg border-info rounded flex flex-col bg-linear-to-br from-base-300 to-base-300/50"
             style="height: 500px"
           >
             <div class="basis-1/4 p-4">
