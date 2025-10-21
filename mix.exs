@@ -81,7 +81,7 @@ defmodule Alea.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "copy_env", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
@@ -94,5 +94,24 @@ defmodule Alea.MixProject do
       ],
       precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
     ]
+  end
+
+  defp copy_env(_) do
+    source = "example.dev"
+    target = "dev.env"
+
+    if Mix.env() in [:dev, :test] do
+      if File.exists?(target) do
+        Mix.shell().info("#{target} already exists, skipping...")
+      else
+        case File.cp(source, target) do
+          :ok ->
+            Mix.shell().info("Created #{target} from #{source}")
+
+          {:error, reason} ->
+            Mix.shell().error("Failed to copy #{source}: #{inspect(reason)}")
+        end
+      end
+    end
   end
 end
