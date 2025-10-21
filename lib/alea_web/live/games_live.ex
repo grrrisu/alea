@@ -11,6 +11,19 @@ defmodule AleaWeb.GamesLive do
     ~H"""
     <Layouts.app flash={@flash}>
       <.main_title>Games</.main_title>
+
+      <fieldset class="fieldset bg-base-100 rounded-box w-64 border p-4 flex flex-row">
+        <legend class="fieldset-legend">Filter options</legend>
+        <label class="label">
+          <input type="checkbox" checked="checked" class="toggle" name="extensions" /> Extensions
+          <.icon name="la-puzzle-piece" />
+        </label>
+        <label class="label">
+          <input type="checkbox" checked="checked" class="toggle" name="owned" /> Owned
+          <.icon name="la-home" />
+        </label>
+      </fieldset>
+
       <.box_grid cols="4">
         <:box :for={game <- @games}>
           <div
