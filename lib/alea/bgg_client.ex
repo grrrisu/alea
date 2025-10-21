@@ -8,6 +8,10 @@ defmodule Alea.BggClient do
 
       export BGG_GAMES_URL="https://boardgamegeek.com/xmlapi2/collection?username=YOUR_USERNAME&stats=1"
 
+      https://boardgamegeek.com/xmlapi2/thing?id=363757
+
+      https://boardgamegeek.com/xmlapi2/user?name=grrrisu
+
   ## Retry Behavior
 
   BGG API returns 202 when processing the request. This client will automatically
@@ -20,8 +24,9 @@ defmodule Alea.BggClient do
   @retry_delay_ms 2_000
 
   @impl true
-  def fetch_games do
+  def fetch_games() do
     url = System.get_env("BGG_GAMES_URL") || raise "BGG_GAMES_URL not set"
+    url = url <> "&excludesubtype=boardgameexpansion"
     try_fetch_games(url, 0)
   end
 
