@@ -36,5 +36,5 @@ npm-debug.log
 /assets/node_modules/
 
 # local env files
-*.env
-
+dev.env
+test.env
