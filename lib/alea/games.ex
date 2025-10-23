@@ -27,6 +27,16 @@ defmodule Alea.Games do
     end
   end
 
+  def filter(games, filter) do
+    Enum.reduce(filter, games, fn {option, active}, games ->
+      Enum.filter(games, fn game ->
+        !active ||
+          option == "extensions" ||
+          Map.get(game.status, String.to_atom(option)) == active
+      end)
+    end)
+  end
+
   defp bgg_client do
     Application.get_env(:alea, :bgg_client, Alea.BggClient)
   end

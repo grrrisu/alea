@@ -35,6 +35,8 @@ defmodule Alea.BggClient do
   end
 
   defp try_fetch_games(url, retry_count) do
+    # File.read("test/support/games.xml")
+
     case Req.get(url) do
       {:ok, %{status: 200, body: body}} ->
         {:ok, body}
