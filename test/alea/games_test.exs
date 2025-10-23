@@ -5,7 +5,8 @@ defmodule Alea.GamesTest do
 
   setup :verify_on_exit!
 
-  alias Alea.Games
+  alias Alea.{Games, Status}
+  alias Alea.Factory
 
   @xml """
   <?xml version="1.0" encoding="utf-8"?>
@@ -46,6 +47,52 @@ defmodule Alea.GamesTest do
       end)
 
       assert {:error, "Network error"} = Games.fetch_bgg_games()
+    end
+  end
+
+  describe "filter" do
+    @games [
+             %{own: true},
+             %{own: true, wanttoplay: true},
+             %{own: false, wishlist: true},
+             %{own: false, prevowned: true}
+           ]
+           |> Enum.with_index()
+           |> Enum.map(fn {opts, n} ->
+             Factory.build(
+               :game,
+               %{objectid: 1 + n, status: Map.merge(%Status{}, opts)}
+             )
+           end)
+
+    test "empty" do
+      games = Games.filter(@games, %{})
+      assert Enum.count(games) == 4
+    end
+
+    test "nothing selected" do
+      games = Games.filter(@games, %{"own" => false})
+      assert Enum.count(games) == 4
+    end
+
+    # test "extensions" do
+    #   games = Games.filter(@games, %{"extensions" => true})
+    #   assert Enum.count(games) == 0
+    # end
+
+    test "own" do
+      games = Games.filter(@games, %{"own" => true})
+      assert Enum.map(games, & &1.objectid) == [1, 2]
+    end
+
+    test "whishlist" do
+      games = Games.filter(@games, %{"wishlist" => true})
+      assert Enum.map(games, & &1.objectid) == [3]
+    end
+
+    test "combined own and whishlist" do
+      games = Games.filter(@games, %{"own" => true, "wishlist" => true})
+      assert Enum.empty?(games)
     end
   end
 end
