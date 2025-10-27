@@ -31,9 +31,11 @@ defmodule AleaWeb.GamesLive do
   end
 
   def render(assigns) do
+    assigns = assign(assigns, :count, Enum.count(assigns.games))
+
     ~H"""
     <Layouts.app flash={@flash}>
-      <.main_title>Games</.main_title>
+      <.main_title>Games ({@count})</.main_title>
 
       <.filter filter={@filter}>
         <:option name="extensions" icon="hero-puzzle-piece" />
@@ -53,7 +55,7 @@ defmodule AleaWeb.GamesLive do
             id={"game-#{game.objectid}"}
           >
             <div class="basis-1/4 p-4">
-              <h3>{game.name}</h3>
+              <.sub_title>{game.name}</.sub_title>
             </div>
             <div class="relative basis-1/2 w-full">
               <img
