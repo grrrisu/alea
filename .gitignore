@@ -38,3 +38,6 @@ npm-debug.log
 # local env files
 dev.env
 test.env
+
+# test data
+test/support/games.xml
