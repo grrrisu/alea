@@ -25,10 +25,9 @@ defmodule Alea.BggClient do
 
   @impl true
   def fetch_games() do
-    url = System.get_env("BGG_GAMES_URL") || raise "BGG_GAMES_URL not set"
-    token = System.get_env("BGG_TOKEN") || raise "BGG_TOKEN not set"
-    url = url <> "&excludesubtype=boardgameexpansion"
-    req = Req.new(url: url, headers: %{authorization: "bearer #{token}"})
+    config = Application.get_env(:alea, Alea.BggClient)
+    url = config[:url] <> "&excludesubtype=boardgameexpansion"
+    req = Req.new(url: url, headers: %{authorization: "bearer #{config[:token]}"})
     try_fetch_games(req, 0)
   end
 

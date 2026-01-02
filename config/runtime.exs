@@ -1,4 +1,5 @@
 import Config
+import Dotenvy
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
@@ -19,6 +20,18 @@ import Config
 if System.get_env("PHX_SERVER") do
   config :alea, AleaWeb.Endpoint, server: true
 end
+
+# Load environment variables from .env file in dev and test environments
+env_dir_prefix = System.get_env("RELEASE_ROOT") || Path.expand(".")
+
+source!([
+  Path.absname("#{config_env()}.env", env_dir_prefix),
+  System.get_env()
+])
+
+config :alea, Alea.BggClient,
+  url: env!("BGG_GAMES_URL"),
+  token: env!("BGG_TOKEN")
 
 if config_env() == :prod do
   database_url =
