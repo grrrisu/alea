@@ -26,27 +26,29 @@ defmodule Alea.BggClient do
   @impl true
   def fetch_games() do
     url = System.get_env("BGG_GAMES_URL") || raise "BGG_GAMES_URL not set"
+    token = System.get_env("BGG_TOKEN") || raise "BGG_TOKEN not set"
     url = url <> "&excludesubtype=boardgameexpansion"
-    try_fetch_games(url, 0)
+    req = Req.new(url: url, headers: %{authorization: "bearer #{token}"})
+    try_fetch_games(req, 0)
   end
 
-  defp try_fetch_games(_url, retry_count) when retry_count >= @max_retries do
+  defp try_fetch_games(_req, retry_count) when retry_count >= @max_retries do
     {:error, "Max retries (#{@max_retries}) exceeded while fetching games from BGG"}
   end
 
-  defp try_fetch_games(url, retry_count) do
+  defp try_fetch_games(req, retry_count) do
     # File.read("test/support/games.xml")
 
-    case Req.get(url) do
+    case Req.get(req) do
       {:ok, %{status: 200, body: body}} ->
         {:ok, body}
 
       {:ok, %{status: 202}} ->
         Process.sleep(@retry_delay_ms)
-        try_fetch_games(url, retry_count + 1)
+        try_fetch_games(req, retry_count + 1)
 
       {:ok, %{status: 401, body: _body}} ->
-        {:error, "BGG API returned 401 Unauthorized."}
+        {:error, "BGG API returned 401 Unauthorized. No valid BGG_TOKEN provided."}
 
       {:ok, %{status: status, body: body}} ->
         {:error, "BGG API returned status #{status}: #{body}"}
