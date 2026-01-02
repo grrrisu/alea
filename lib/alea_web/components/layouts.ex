@@ -68,6 +68,12 @@ defmodule AleaWeb.Layouts do
       </div>
     </main>
 
+    <footer class="p-4 sm:px-6 lg:px-8">
+      <a href="https://boardgamegeek.com" target="_blank" rel="noopener noreferrer">
+        <img src={~p"/images/powered_by_bgg.webp"} class="float-right" />
+      </a>
+    </footer>
+
     <.flash_group flash={@flash} />
     """
   end
