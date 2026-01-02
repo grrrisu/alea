@@ -45,6 +45,9 @@ defmodule Alea.BggClient do
         Process.sleep(@retry_delay_ms)
         try_fetch_games(url, retry_count + 1)
 
+      {:ok, %{status: 401, body: _body}} ->
+        {:error, "BGG API returned 401 Unauthorized."}
+
       {:ok, %{status: status, body: body}} ->
         {:error, "BGG API returned status #{status}: #{body}"}
 

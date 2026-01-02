@@ -105,7 +105,15 @@ defmodule AleaWeb.GamesLive do
   end
 
   defp get_games(socket) do
-    {:ok, games} = Games.fetch_bgg_games()
+    {socket, games} =
+      case Games.fetch_bgg_games() do
+        {:error, reason} ->
+          {socket |> put_flash(:error, "Failed to fetch games: #{reason}"), []}
+
+        {:ok, games} ->
+          {socket, games}
+      end
+
     socket |> assign(all: games) |> apply_filter()
   end
 end
